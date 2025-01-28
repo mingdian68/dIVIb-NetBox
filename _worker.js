@@ -1,4 +1,4 @@
-addEventListener('fetch', event => {
+addEventListener('fetch'， event => {
 	event.respondWith(handleRequest(event.request));
 });
 // 存储拼接后的字符串，用于去重
@@ -39,33 +39,8 @@ async function handleRequest(request) {
 		{ url: "https://www.githubip.xyz/Alvin9999/pac2/master/singbox/config.json", type: "singbox" },
 		{ url: "https://fastly.jsdelivr.net/gh/Alvin9999/pac2@latest/singbox/config.json", type: "singbox" },
 		{ url: "https://www.gitlabip.xyz/Alvin9999/pac2/master/singbox/1/config.json", type: "singbox" },
-		//clash
-		{ url: "https://gitlab.com/free9999/ipupdate/-/raw/master/clash.meta2/config.yaml", type: "clash" },
-		{ url: "https://gitlab.com/free9999/ipupdate/-/raw/master/clash.meta2/config.yaml", type: "clash" },
-		{ url: "https://www.githubip.xyz/Alvin9999/pac2/master/clash.meta2/config.yaml", type: "clash" },
-		{ url: "https://fastly.jsdelivr.net/gh/Alvin9999/pac2@latest/clash.meta2/config.yaml", type: "clash" },
-		{ url: "https://www.gitlabip.xyz/Alvin9999/pac2/master/clash.meta2/13/config.yaml", type: "clash" },
-		{ url: "https://gitlab.com/free9999/ipupdate/-/raw/master/clash.meta2/2/config.yaml", type: "clash" },
-		{ url: "https://www.githubip.xyz/Alvin9999/pac2/master/clash.meta2/2/config.yaml", type: "clash" },
-		{ url: "https://fastly.jsdelivr.net/gh/Alvin9999/pac2@latest/clash.meta2/2/config.yaml", type: "clash" },
-		{ url: "https://www.gitlabip.xyz/Alvin9999/pac2/master/clash.meta2/15/config.yaml", type: "clash" },
-		{ url: "https://gitlab.com/free9999/ipupdate/-/raw/master/clash.meta2/3/config.yaml", type: "clash" },
-		{ url: "https://www.githubip.xyz/Alvin9999/pac2/master/clash.meta2/3/config.yaml", type: "clash" },
-		{ url: "https://fastly.jsdelivr.net/gh/Alvin9999/pac2@latest/clash.meta2/3/config.yaml", type: "clash" },
-		{ url: "https://raw.githubusercontent.com/Alvin9999/pac2/master/quick/4/config.yaml", type: "clash" },
-		{ url: "https://raw.githubusercontent.com/Alvin9999/pac2/master/quick/1/config.yaml", type: "clash" },
-		{ url: "https://raw.githubusercontent.com/Alvin9999/pac2/master/quick/config.yaml", type: "clash" },
-		{ url: "https://raw.githubusercontent.com/Alvin9999/pac2/master/quick/3/config.yaml", type: "clash" },
-
-		//naive		
-		{ url: "https://www.gitlabip.xyz/Alvin9999/PAC/master/naiveproxy/1/config.json", type: "naiveh" },
-		{ url: "https://gitlab.com/free9999/ipupdate/-/raw/master/naiveproxy/config.json", type: "naive" },
-		{ url: "https://www.githubip.xyz/Alvin9999/PAC/master/naiveproxy/config.json", type: "naive" },
-		{ url: "https://fastly.jsdelivr.net/gh/Alvin9999/PAC@latest/naiveproxy/config.json", type: "naive" },
 		// 添加更多的网站地址和类型...
-	];
-
-	
+	];	
 
 	// 遍历所有地址并发送请求
 	const promises = sites.map(site => fetchData(site));
@@ -92,14 +67,7 @@ async function fetchData(site) {
 		const response = await fetch(site.url);
 		let data
 
-		let stype = site.type
-		if (stype === 'clash') {
-
-			data = await response.text()
-		} else {
-
-			data = await response.json();
-		}
+		let stype = site.type		
 		// 根据类型选择对应的处理函数
 		let formattedString;
 		if (site.type === "hysteria") {
@@ -114,13 +82,7 @@ async function fetchData(site) {
 		else if (site.type === 'singbox') {
 			processSingbox(data)
 
-		}
-		else if (site.type === 'clash') {
-			processClash(data)
-		}
-		else if (site.type === 'naive') {
-			processNaive(data)
-		}
+		}				
 
 	} catch (error) {
 		console.error(`Error fetching data from ${site.url}: ${error}`);
@@ -198,9 +160,7 @@ function processSingbox(data) {
 }
 
 function processClash(data) {
-	// 使用 js-yaml 或其他方式来解析 YAML 数据
-	const jsyaml = require('js-yaml');
-
+	
 	// 解析 YAML 内容
 	const content = jsyaml.load(data)
 
@@ -403,9 +363,4 @@ function processClash(data) {
 
 	});
 }
-//处理naive
-function processNaive(data) {
-	let proxy_str = data.proxy
-	let naiveproxy = btoa(unescape(encodeURIComponent(proxy_str)));
-	uniqueStrings.add(naiveproxy)
-}
+
